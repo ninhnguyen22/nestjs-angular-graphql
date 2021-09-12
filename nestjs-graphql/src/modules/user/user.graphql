@@ -1,0 +1,96 @@
+### DIRECTIVE ###
+
+directive @isAuthenticated on FIELD | FIELD_DEFINITION
+directive @hasRole(role: String) on FIELD | FIELD_DEFINITION
+
+### SCALAR ###
+scalar Upload
+
+### INPUT ###
+
+input UserCreateInput {
+    name: String!
+    password: String!
+    email: String!
+    roles: [String]
+}
+
+input UserUpdateInput {
+    name: String!
+    password: String!
+    email: String!
+    roles: [String]
+}
+
+input LoginUserInput {
+    email: String!
+    password: String!
+}
+
+input RegisterInput {
+    name: String!
+    password: String!
+    email: String!
+}
+
+input ProfileUpdateInput {
+    name: String
+    email: String
+}
+
+input ProfilePwUpdateInput {
+    oldPassword: String!
+    newPassword: String!
+}
+
+### TYPES ###
+type LoginResponse {
+    token: String
+    refreshToken: String
+    user: User
+}
+
+type RefreshTokenResponse {
+    token: String
+}
+
+type User {
+    _id: String!
+    name: String!
+    email: String!
+    avatar: String
+    createdAt: String!
+    updatedAt: String!
+    roles: [Role]
+}
+
+type Role {
+    name: String!
+    code: String!
+}
+
+### QUERY ###
+type Query {
+    me: User @isAuthenticated
+    users: [User] @hasRole(role: "admin")
+    user(_id: String!): User @isAuthenticated
+    roles: [Role]
+}
+
+### MUTATION ###
+type Mutation {
+    # User manager
+    userCreate(input: UserCreateInput!): User @hasRole(role: "admin")
+    userUpdate(_id: String!, input: UserUpdateInput!): Boolean @hasRole(role: "admin")
+    userDelete(_id: String!): Boolean @hasRole(role: "admin")
+    # Profile
+    profileUpdate(input: ProfileUpdateInput!): Boolean @isAuthenticated
+    profilePwUpdate(input: ProfilePwUpdateInput!): Boolean @isAuthenticated
+    profileAvatarUpdate(file: Upload!): Boolean @isAuthenticated
+    # Auth
+    register(input: RegisterInput!): User
+    login(input: LoginUserInput!): LoginResponse
+    refreshToken(refreshToken: String!): RefreshTokenResponse
+    # Notification
+    lasNotifyUpdate(lastNotifyAt: String!): Boolean @isAuthenticated
+}

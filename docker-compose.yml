@@ -1,0 +1,39 @@
+version: "2"
+services:
+    client:
+        container_name: angular
+        build: './angular-graphql'
+        restart: always
+        ports:
+            - "4200:4200"
+        volumes:
+            - ./angular-graphql:app
+        networks:
+            - appnetwork
+
+    server:
+        container_name: nestjs
+        build: './nestjs-graphql'
+        restart: always
+        ports:
+            - "3000:3000"
+        volumes:
+            - ./nestjs-graphql:app
+        depends_on:
+            - mongodb
+        networks:
+            - appnetwork
+
+    mongodb:
+        image: mongo
+        restart: always
+        container_name: mongodb
+        ports:
+            - 27017:27017
+        command: mongod --noauth
+        networks:
+            - appnetwork
+
+networks:
+    appnetwork:
+        driver: bridge

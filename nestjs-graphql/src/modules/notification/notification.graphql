@@ -1,0 +1,24 @@
+directive @isAuthenticated on FIELD | FIELD_DEFINITION
+directive @hasRole(role: String) on FIELD | FIELD_DEFINITION
+
+type NotifySubscription {
+    userId: String
+    message: String
+    createdAt: String
+}
+
+type NotificationWithCount {
+    notifications: [NotifySubscription],
+    count: Int
+}
+
+### QUERY ###
+type Query {
+    notifications: NotificationWithCount @isAuthenticated
+}
+
+### SUBSCRIPTION ###
+type Subscription {
+    notify: NotifySubscription! @isAuthenticated
+    notifyAdmin: NotifySubscription! @hasRole(role: "admin")
+}

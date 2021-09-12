@@ -1,0 +1,21 @@
+<form [formGroup]="form" enctype="multipart/form-data">
+  <p>Use the form below to change your avatar.</p>
+
+  <div>
+    <div>
+      <mat-form-field class="full-width">
+        <input matInput placeholder="Choose File" formControlName="fileName" disabled>
+        <mat-icon matSuffix style="cursor: pointer" (click)="UploadFileInput.click()">
+          attach_file
+        </mat-icon>
+      </mat-form-field>
+
+      <input type="file" formControlName="file" hidden
+             #UploadFileInput id="fileUpload" (change)="fileChangeEvent($event.target.files)"
+             accept="image/png, image/gif, image/jpeg">
+
+    </div>
+
+  </div>
+
+</form>

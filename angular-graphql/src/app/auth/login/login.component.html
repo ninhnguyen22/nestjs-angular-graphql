@@ -1,0 +1,38 @@
+<div class="login-container">
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <mat-card class="login-container__form">
+      <mat-card-title>ANGULAR GRAPHQL</mat-card-title>
+      <mat-card-subtitle>Log in to your account</mat-card-subtitle>
+      <mat-card-content>
+
+        <mat-form-field class="full-width">
+          <input id="emailInput" matInput placeholder="Email" formControlName="email" autocomplete="email"
+                 type="email" required>
+          <mat-error>
+            Please provide a valid email address
+          </mat-error>
+
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+          <input id="passwordInput" matInput placeholder="Password" formControlName="password" type="password" required>
+          <mat-error>
+            Please provide a valid password
+          </mat-error>
+        </mat-form-field>
+
+        <div class="full-width">
+          <mat-slide-toggle formControlName="rememberMe">Remember my email address</mat-slide-toggle>
+        </div>
+
+      </mat-card-content>
+
+      <mat-card-actions class="login-actions">
+        <button mat-raised-button id="login" color="primary">Login</button>
+<!--        <button mat-button id="resetPassword" (click)="resetPassword()" type="button">Reset Password</button>-->
+      </mat-card-actions>
+
+    </mat-card>
+
+  </form>
+</div>

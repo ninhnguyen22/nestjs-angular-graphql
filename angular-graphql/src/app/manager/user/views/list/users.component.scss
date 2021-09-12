@@ -1,0 +1,22 @@
+table {
+  width: 100%;
+}
+
+::ng-deep .mat-grid-tile .mat-figure {
+  align-items: start !important;
+  justify-content: start !important;
+}
+
+.mat-form-field {
+  display: block;
+}
+
+.avatar {
+  border-radius: 50%;
+  max-width: 60px;
+  max-height: 60px;
+  margin: 5px;
+}
+
+
+
