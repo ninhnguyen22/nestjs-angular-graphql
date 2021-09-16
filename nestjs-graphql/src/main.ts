@@ -2,8 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
 import * as dotenv from 'dotenv';
-import { HttpExceptionFilter, InternalExceptionFilter, logger } from './config';
-import { ValidationPipe } from '@nestjs/common';
+import { logger, ValidationPipe } from './config';
+import { useContainer } from 'class-validator';
 
 dotenv.config();
 const port = process.env.APP_PORT || 3000;
@@ -13,9 +13,9 @@ async function bootstrap() {
     cors: true,
   });
 
-  app.useGlobalFilters(new InternalExceptionFilter());
-  app.useGlobalFilters(new HttpExceptionFilter());
-  app.useGlobalPipes(new ValidationPipe({transform: true}));
+  useContainer(app.select(AppModule), { fallbackOnErrors: true });
+
+  app.useGlobalPipes(new ValidationPipe());
 
   await app
     .listen(port)

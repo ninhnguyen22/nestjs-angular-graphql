@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
-import { ProfilePwUpdateDto, ProfileUpdateDto, RegisterUserDto, UserCreateDto, UserUpdateDto } from '../dto';
 import { User } from '../entities';
 import { UserRepository } from '../repositories';
 import { jwtService } from '../../../config/services';
@@ -9,6 +8,11 @@ import { Role } from '../entities/role.entity';
 import roles from './roles.mock';
 import { RoleService } from './role.service';
 import { EncryptionHelper } from '../helpers';
+import {
+  ProfilePwUpdateInput,
+  ProfileUpdateInput,
+} from '../../../graphql';
+import { RegisterInputDto, UserCreateInputDto, UserUpdateInputDto } from '../dto';
 
 @Injectable()
 export class UserService {
@@ -38,7 +42,7 @@ export class UserService {
     });
   }
 
-  async create(user: UserCreateDto): Promise<User> {
+  async create(user: UserCreateInputDto): Promise<User> {
     const userEntity = new User();
     userEntity.name = user.name;
     userEntity.email = user.email;
@@ -47,7 +51,7 @@ export class UserService {
     return await this.userRepository.save(userEntity);
   }
 
-  async update(_id: string, user: UserUpdateDto): Promise<boolean> {
+  async update(_id: string, user: UserUpdateInputDto): Promise<boolean> {
     const rolesData = await this.roleService.findByCodes(user.roles);
     if (user.password) {
       user.password = await EncryptionHelper.encrypt(user.password);
@@ -74,8 +78,16 @@ export class UserService {
     );
   }
 
-  async register(user: RegisterUserDto): Promise<User> {
-    const entity = Object.assign(new User(), user);
+  async register(user: RegisterInputDto): Promise<User> {
+    const entity = new User();
+    entity.name = user.name;
+    entity.email = user.email;
+    entity.password = await EncryptionHelper.encrypt(user.password);
+
+    /* Set role `member` for new user */
+    const memberRole = await this.roleService.findOne('member');
+    entity.roles = [memberRole];
+
     return await this.userRepository.save(entity);
   }
 
@@ -99,11 +111,7 @@ export class UserService {
     }
   }
 
-  async findByProjectId(_id: string): Promise<User[]> {
-    return await this.userRepository.find({where: {projects: _id}});
-  }
-
-  async profileUpdate(user: User, input: ProfileUpdateDto): Promise<boolean> {
+  async profileUpdate(user: User, input: ProfileUpdateInput): Promise<boolean> {
     const userData = {...user, ...input};
     return !!await this.userRepository.findOneAndUpdate(
       {_id: user._id},
@@ -111,7 +119,7 @@ export class UserService {
     );
   }
 
-  async profilePwUpdate(user: User, input: ProfilePwUpdateDto): Promise<boolean> {
+  async profilePwUpdate(user: User, input: ProfilePwUpdateInput): Promise<boolean> {
     const userEntity = await this.userRepository.findOne({_id: user._id});
     if (!userEntity || !(await userEntity.matchesPassword(input.oldPassword))) {
       return false;

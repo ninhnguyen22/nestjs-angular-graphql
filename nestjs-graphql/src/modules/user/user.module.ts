@@ -8,8 +8,11 @@ import { FileUploadService } from '../../config/services';
 
 @Global()
 @Module({
-  imports: [TypeOrmModule.forFeature([User, UserRepository, AuthRepository, RefreshTokenRepository])],
+  imports: [
+    TypeOrmModule.forFeature([User, UserRepository, AuthRepository, RefreshTokenRepository]),
+  ],
   providers: [UserResolver, UserService, AuthService, TokenService, RoleService, FileUploadService],
   exports: [UserService],
 })
-export class UserModule {}
+export class UserModule {
+}

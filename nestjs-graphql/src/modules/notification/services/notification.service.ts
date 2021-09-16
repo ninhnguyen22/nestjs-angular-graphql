@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { NotificationCreateDto } from '../dto';
 import { Notification } from '../entities';
 import { NotificationRepository } from '../repositories';
-import { User } from '../../user/entities';
+import { User } from '../../../graphql';
 
 @Injectable()
 export class NotificationService {

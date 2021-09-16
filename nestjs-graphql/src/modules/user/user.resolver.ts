@@ -2,16 +2,17 @@ import { Resolver, Query, Mutation, Args, Context } from '@nestjs/graphql';
 import { GraphQLUpload, FileUpload } from 'graphql-upload';
 
 import { UserService, AuthService } from './services';
-import {
-  UserCreateDto,
-  UserUpdateDto,
-  LoginUserDto,
-  LoginResponseUserDto,
-  RefreshTokenDto, RegisterUserDto, ProfileUpdateDto, ProfilePwUpdateDto,
-} from './dto';
+
 import { User } from './entities';
 import { NotificationPubSubService } from '../notification/services';
 import { FileUploadService } from '../../config/services';
+import {
+  LoginResponse,
+  LoginUserInput, ProfilePwUpdateInput, ProfileUpdateInput,
+  RefreshTokenResponse,
+  Role,
+} from '../../graphql';
+import { RegisterInputDto, UserCreateInputDto, UserUpdateInputDto } from './dto';
 
 @Resolver('User')
 export class UserResolver {
@@ -38,20 +39,20 @@ export class UserResolver {
     return this.userService.findById(_id);
   }
 
-  @Query(() => [User])
+  @Query(() => [Role])
   async roles() {
     return this.userService.getRoles();
   }
 
   @Mutation(() => User)
-  async userCreate(@Args('input') input: UserCreateDto) {
+  async userCreate(@Args('input') input: UserCreateInputDto) {
     return await this.userService.create(input);
   }
 
   @Mutation(() => User)
   async userUpdate(
     @Args('_id') _id: string,
-    @Args('input') input: UserUpdateDto,
+    @Args('input') input: UserUpdateInputDto,
   ) {
     return await this.userService.update(_id, input);
   }
@@ -61,8 +62,8 @@ export class UserResolver {
     return await this.userService.delete(_id);
   }
 
-  @Mutation(() => LoginResponseUserDto)
-  async login(@Args('input') input: LoginUserDto) {
+  @Mutation(() => LoginResponse)
+  async login(@Args('input') input: LoginUserInput) {
     const loginResponse = await this.authService.login(input);
     /* Login Subscription */
     if (loginResponse && loginResponse.user) {
@@ -72,11 +73,11 @@ export class UserResolver {
   }
 
   @Mutation(() => User)
-  async register(@Args('input') input: RegisterUserDto) {
+  async register(@Args('input') input: RegisterInputDto) {
     return await this.userService.register(input);
   }
 
-  @Mutation(() => RefreshTokenDto)
+  @Mutation(() => RefreshTokenResponse)
   async refreshToken(@Args('refreshToken') refreshToken: string) {
     return await this.authService.refreshToken(refreshToken);
   }
@@ -84,7 +85,7 @@ export class UserResolver {
   @Mutation(() => User)
   async profileUpdate(
     @Context('currentUser') currentUser: User,
-    @Args('input') input: ProfileUpdateDto,
+    @Args('input') input: ProfileUpdateInput,
   ) {
     return await this.userService.profileUpdate(currentUser, input);
   }
@@ -95,6 +96,9 @@ export class UserResolver {
     @Args({name: 'file', type: () => GraphQLUpload}) fileUpload: FileUpload,
   ): Promise<boolean> {
     const avatar = await this.fileUploadService.upload(fileUpload);
+    if (!avatar) {
+      return false;
+    }
     const updateStatus = await this.userService.profileAvatarUpdate(currentUser, avatar);
     if (updateStatus) {
       /* Remove old avatar */
@@ -108,7 +112,7 @@ export class UserResolver {
   @Mutation(() => User)
   async profilePwUpdate(
     @Context('currentUser') currentUser: User,
-    @Args('input') input: ProfilePwUpdateDto,
+    @Args('input') input: ProfilePwUpdateInput,
   ) {
     return await this.userService.profilePwUpdate(currentUser, input);
   }

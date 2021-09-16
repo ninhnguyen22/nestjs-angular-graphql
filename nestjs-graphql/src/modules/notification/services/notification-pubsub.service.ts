@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { PubSub } from 'graphql-subscriptions';
-import { User } from '../../user/entities';
 import { NotificationCreateDto } from '../dto';
 import { NotificationService } from './notification.service';
+import { User } from '../../../graphql';
 
 const pubSub = new PubSub();
 

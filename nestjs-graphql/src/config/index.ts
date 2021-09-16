@@ -2,4 +2,4 @@ export * from './cache';
 export * from './graphql';
 export * from './logger';
 export * from './typeorm';
-export * from './filters';
+export * from './pipes';

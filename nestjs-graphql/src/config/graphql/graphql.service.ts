@@ -4,6 +4,7 @@ import { MemcachedCache } from 'apollo-server-cache-memcached';
 import { UserService } from '../../modules/user/services';
 import { join } from 'path';
 import schemaDirectives from './schemaDirectives';
+import { GraphQLError } from 'graphql';
 
 @Injectable()
 export class GraphqlService implements GqlOptionsFactory {
@@ -43,10 +44,7 @@ export class GraphqlService implements GqlOptionsFactory {
         };
       },
       formatError: err => {
-        return new HttpException(
-          {message: err.message, code: err.extensions.code},
-          HttpStatus[`${err.extensions.code}`] || HttpStatus.FORBIDDEN,
-        );
+        return err;
       },
       formatResponse: res => {
         return res;

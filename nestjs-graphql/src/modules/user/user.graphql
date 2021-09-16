@@ -17,8 +17,7 @@ input UserCreateInput {
 
 input UserUpdateInput {
     name: String!
-    password: String!
-    email: String!
+    password: String
     roles: [String]
 }
 
@@ -35,7 +34,6 @@ input RegisterInput {
 
 input ProfileUpdateInput {
     name: String
-    email: String
 }
 
 input ProfilePwUpdateInput {
@@ -59,8 +57,8 @@ type User {
     name: String!
     email: String!
     avatar: String
-    createdAt: String!
-    updatedAt: String!
+    createdAt: String
+    updatedAt: String
     roles: [Role]
 }
 

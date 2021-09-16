@@ -10,6 +10,7 @@ import {
 } from './config';
 import { NotificationModule, UserModule } from './modules';
 import { Upload } from './config/graphql/scalars';
+import { Unique } from './config/validator';
 
 @Module({
   imports: [
@@ -23,11 +24,14 @@ import { Upload } from './config/graphql/scalars';
     CacheModule.registerAsync({
       useClass: CacheService,
     }),
-    /*ServeStaticModule.forRoot({
+    ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
-    }),*/
+    }),
     UserModule,
     NotificationModule,
+  ],
+  providers: [
+      Unique,
   ],
 })
 export class AppModule {

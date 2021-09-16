@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { LoginUserDto, LoginResponseUserDto, RefreshTokenDto } from '../dto';
 import { AuthRepository } from '../repositories';
 import { AuthenticationError } from 'apollo-server-core';
 import { logger } from '../../../config/logger';
 import { JwtService } from '@nestjs/jwt';
 import { jwtService } from '../../../config/services';
 import { TokenService } from './token.service';
+import { LoginResponse, LoginUserInput, RefreshTokenResponse } from '../../../graphql';
 
 @Injectable()
 export class AuthService {
@@ -20,7 +20,7 @@ export class AuthService {
     this.jwtService = jwtService;
   }
 
-  async login(input: LoginUserDto): Promise<LoginResponseUserDto> {
+  async login(input: LoginUserInput): Promise<LoginResponse> {
     try {
       const {email, password} = input;
 
@@ -47,9 +47,12 @@ export class AuthService {
     }
   }
 
-  async refreshToken(token: string): Promise<RefreshTokenDto> {
+  async refreshToken(token: string): Promise<RefreshTokenResponse> {
     try {
       const refreshToken = await this.tokenService.findRefreshToken(token);
+      if (!refreshToken) {
+        return {token: null};
+      }
 
       /* Create Access Token */
       const accessToken = await this.tokenService.createAccessToken({

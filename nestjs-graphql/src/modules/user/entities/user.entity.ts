@@ -7,11 +7,10 @@ import {
   BeforeInsert, BeforeUpdate,
 } from 'typeorm';
 import * as uuid from 'uuid';
-import { IsString, IsNotEmpty } from 'class-validator';
 import { EncryptionHelper } from '../helpers';
 import { Role } from './role.entity';
 
-@Entity('user', {
+@Entity('users', {
   orderBy: {
     created_at: 'ASC',
   },
@@ -20,29 +19,34 @@ export class User {
   @ObjectIdColumn()
   _id: string;
 
-  @Column()
-  @IsString()
-  @IsNotEmpty()
+  @Column({
+    type: 'string',
+  })
   name: string;
 
-  @Column()
-  @IsString()
-  @IsNotEmpty()
+  @Column({
+    type: 'string',
+  })
   password: string;
 
-  @Column()
-  @IsString()
-  @IsNotEmpty()
+  @Column({
+    type: 'string',
+  })
   email: string;
 
-  @Column({default: '/avatar.png'})
-  @IsString()
+  @Column({
+    type: 'string',
+    default: '',
+  })
   avatar: string;
 
-  @Column({default: []})
+  @Column({
+    type: 'array',
+    default: [],
+  })
   roles: Role[];
 
-  @CreateDateColumn({type: 'timestamp', default: ''})
+  @Column({type: 'timestamp', default: ''})
   lastNotifyAt: string;
 
   @CreateDateColumn({type: 'timestamp'})

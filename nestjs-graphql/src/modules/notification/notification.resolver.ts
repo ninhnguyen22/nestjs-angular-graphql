@@ -2,6 +2,7 @@ import { Context, Query, Resolver, Subscription } from '@nestjs/graphql';
 
 import { NotificationPubSubService, NotificationService } from './services';
 import { User } from '../user/entities';
+import { NotificationWithCount } from '../../graphql';
 
 @Resolver('User')
 export class NotificationResolver {
@@ -11,7 +12,7 @@ export class NotificationResolver {
   ) {
   }
 
-  @Query()
+  @Query(() => NotificationWithCount)
   async notifications(
     @Context('currentUser') currentUser: User,
   ) {

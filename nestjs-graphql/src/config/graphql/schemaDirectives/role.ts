@@ -1,5 +1,6 @@
-import { SchemaDirectiveVisitor, AuthenticationError } from 'apollo-server-express';
+import { AuthenticationError } from 'apollo-server-express';
 import { defaultFieldResolver, GraphQLField } from 'graphql';
+import { SchemaDirectiveVisitor } from 'graphql-tools';
 
 export class RoleDirective extends SchemaDirectiveVisitor {
   visitFieldDefinition(field: GraphQLField<any, any>) {
