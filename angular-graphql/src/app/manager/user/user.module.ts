@@ -5,7 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { UsersComponent, UserDialogFormComponent, } from './views';
 import { UserService } from './user.service';
-import { MaterialModule } from "../../shared/material.module";
+import { MaterialModule } from '../../shared/material.module';
 
 @NgModule({
   declarations: [

@@ -25,7 +25,6 @@ export interface DialogData {
 export class UserDialogFormComponent implements OnInit {
 
   createStatus = true;
-  @Input() id: string;
 
   @Output()
   resetData = new EventEmitter<boolean>();
@@ -62,6 +61,8 @@ export class UserDialogFormComponent implements OnInit {
       /* Remove pw validator */
       this.f.password.clearValidators();
       this.f.password.updateValueAndValidity();
+      /* Disable input email */
+      this.f.email.disable();
     }
   }
 
@@ -108,7 +109,6 @@ export class UserDialogFormComponent implements OnInit {
   onSubmit() {
     const variables = {
       name: this.f.name.value,
-      email: this.f.email.value,
       password: this.f.password.value,
       roles: this.f.roles.value,
     };
@@ -117,7 +117,7 @@ export class UserDialogFormComponent implements OnInit {
     }
 
     if (this.createStatus) {
-      this.userService.createUsers(variables).subscribe(
+      this.userService.createUsers({...variables, ...{email: this.f.email.value}}).subscribe(
         (res) => {
           if (res.data.userCreate) {
             this.notificationService.openSnackBar('Created success!');
@@ -128,11 +128,10 @@ export class UserDialogFormComponent implements OnInit {
         error => console.log(error),
       );
     } else {
-      this.userService.updateUsers({...variables, ...{_id: this.id}}).subscribe(
+      this.userService.updateUsers({...variables, ...{_id: this.dialogInput.id}}).subscribe(
         (res) => {
           if (res.data.userUpdate) {
             this.notificationService.openSnackBar('Updated success!');
-
             this.emitToUserList(true);
           }
         },

@@ -71,7 +71,6 @@ export const updateUserMutation = gql`
   mutation userUpdate(
     $_id: String!
     $name: String!
-    $email: String!
     $password: String!
     $roles: [String]
   ) {
@@ -79,7 +78,6 @@ export const updateUserMutation = gql`
       _id: $_id
       input: {
         name: $name
-        email: $email
         password: $password
         roles: $roles
       }

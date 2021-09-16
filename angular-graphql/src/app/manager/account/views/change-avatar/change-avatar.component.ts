@@ -1,9 +1,9 @@
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
-import { NotificationService, SpinnerService } from "../../../../shared/services";
-import { AuthenticationService } from "../../../../auth/auth.service";
-import { ProfileService } from "../../profile.service";
+import { NotificationService, SpinnerService } from '../../../../shared/services';
+import { AuthenticationService } from '../../../../auth/auth.service';
+import { ProfileService } from '../../profile.service';
 
 @Component({
   selector: 'app-change-avatar',
@@ -41,7 +41,7 @@ export class ChangeAvatarComponent implements OnInit {
       };
       this.profileService.updateAvatarProfile(variables).subscribe(
         (res) => {
-          if (res.data?.profileAvatarUpdate) {
+          if (res.data.profileAvatarUpdate) {
             this.f.fileName.setValue('');
             this.resetData.emit(true);
           }

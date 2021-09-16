@@ -3,6 +3,7 @@ import { NotifyService } from "../notify.service";
 import { Notify } from "../notify.model";
 import { MatMenuTrigger } from "@angular/material/menu";
 import { AuthenticationService } from "../../../auth/auth.service";
+import { ErrorLink } from "apollo-link-error";
 
 @Component({
   selector: 'app-notify',
@@ -35,8 +36,6 @@ export class NotifyComponent implements OnInit {
           this.notifications = res.data.notifications.notifications;
           this.subscribeNotification();
         }
-      }, error => {
-        console.log(error)
       });
   }
 
@@ -66,20 +65,13 @@ export class NotifyComponent implements OnInit {
           this.notifications.unshift(res.data.notifyAdmin);
           this.notifyCount++;
         }
-      }, error => {
-        const messagesErrors = error.graphQLErrors[0].message;
-        console.log(messagesErrors)
       });
     } else {
       this.notifyService.subscribeNotify().subscribe(async res => {
         if (res.data && res.data.notify) {
-          console.log(res.data.notify)
           this.notifications.unshift(res.data.notify);
           this.notifyCount++;
         }
-      }, error => {
-        const messagesErrors = error.graphQLErrors[0].message;
-        console.log(messagesErrors)
       });
     }
   }
