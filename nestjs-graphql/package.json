@@ -13,6 +13,7 @@
     "start:debug": "tsc-watch -p tsconfig.build.json --onSuccess \"node --inspect-brk=0.0.0.0 dist/main.js\"",
     "start:prod": "node dist/main.js",
     "gen": "ts-node src/generator/generate-typing.ts",
+    "seed": "ts-node -r tsconfig-paths/register src/seeder/seed.ts",
     "lint": "tslint -p tsconfig.json -c tslint.json",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -21,6 +22,8 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@graphql-tools/schema": "^8.2.0",
+    "@graphql-tools/utils": "^8.2.2",
     "@nestjs/common": "^6.0.0",
     "@nestjs/core": "^6.0.0",
     "@nestjs/graphql": "^6.2.4",
