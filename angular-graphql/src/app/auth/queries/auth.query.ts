@@ -23,7 +23,7 @@ export const loginMutation = gql`
 ;
 
 export const refreshTokenMutation = gql`
-  mutation refreshTokenQuery($refreshToken: String!) {
+  mutation refreshTokenMutation($refreshToken: String!) {
     refreshToken(refreshToken: $refreshToken) {
       token
     }

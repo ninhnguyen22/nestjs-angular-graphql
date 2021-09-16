@@ -4,8 +4,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { Apollo } from 'apollo-angular';
 
 import { loginMutation, refreshTokenMutation } from './queries';
-import { UserToken, Role } from "./models";
-import { LoginMutation, RefreshTokenMutation } from "../manager/user/models";
+import { UserToken, Role } from './models';
+import { LoginMutation, RefreshTokenMutation } from '../manager/user/models';
 
 export const CURRENT_USER = 'currentUser';
 
