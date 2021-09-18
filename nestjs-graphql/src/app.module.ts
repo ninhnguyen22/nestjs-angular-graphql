@@ -14,7 +14,6 @@ import { Unique } from './config/validator';
 
 @Module({
   imports: [
-    Upload,
     GraphQLModule.forRootAsync({
       useClass: GraphqlService,
     }),
@@ -31,7 +30,8 @@ import { Unique } from './config/validator';
     NotificationModule,
   ],
   providers: [
-      Unique,
+    Unique,
+    Upload,
   ],
 })
 export class AppModule {

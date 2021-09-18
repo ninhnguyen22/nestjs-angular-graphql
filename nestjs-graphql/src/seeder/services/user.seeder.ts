@@ -16,7 +16,7 @@ export class UserSeeder extends Seeder {
       email: 'admin@local.dev',
       password: EncryptionHelper.encrypt('123456'),
       avatar: '/avatar.png',
-      roles: [{code: 'admin', name: 'admin'}],
+      roles: [{code: 'admin', name: 'Admin'}],
       lastNotifyAt: '',
       createdAt: new Date(),
       updatedAt: new Date(),

@@ -14,7 +14,7 @@ export class Upload {
     return GraphQLUpload.serialize(value);
   }
 
-  parseLiteral(ast, ast2) {
-    return GraphQLUpload.parseLiteral(ast, ast2);
+  parseLiteral(valueNode, variables) {
+    return GraphQLUpload.parseLiteral(valueNode, variables);
   }
 }
